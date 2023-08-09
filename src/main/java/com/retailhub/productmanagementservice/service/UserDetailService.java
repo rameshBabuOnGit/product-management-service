@@ -18,10 +18,10 @@ public class UserDetailService {
         this.userDetailsRepository = userDetailsRepository;
     }
 
-    public String authenticateUser(String userName) {
+    public String authenticateUser(String userName, String password) {
         List<UserDetail> userDetails = userDetailsRepository.retrieveUserDetails();
         boolean checkIfUserExists = userDetails.stream()
-                .anyMatch(userDetail -> userDetail.getUserName().equals(userName));
+                .anyMatch(userDetail -> userDetail.getUserName().equals(userName) && userDetail.getPassword().equals(password));
 
         return checkIfUserIsNewOrOld(checkIfUserExists);
     }
@@ -30,7 +30,7 @@ public class UserDetailService {
         if (checkIfUserExists) {
             return "User Exists";
         } else {
-            throw new InvalidUserException("User does not exist");
+            throw new InvalidUserException("Invalid Username or password");
         }
     }
 }
