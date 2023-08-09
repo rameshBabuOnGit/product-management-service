@@ -1,3 +1,3 @@
 # product-management-service
 
-Springboot App serving retail-hub bff
+Springboot App serving the retail-hub Bff application
