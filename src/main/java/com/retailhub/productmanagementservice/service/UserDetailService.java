@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -18,17 +19,18 @@ public class UserDetailService {
         this.userDetailsRepository = userDetailsRepository;
     }
 
-    public String authenticateUser(String userName, String password) {
+    public UserDetail authenticateUser(String userName, String password) {
         List<UserDetail> userDetails = userDetailsRepository.retrieveUserDetails();
-        boolean checkIfUserExists = userDetails.stream()
-                .anyMatch(userDetail -> userDetail.getUserName().equals(userName) && userDetail.getPassword().equals(password));
+        Optional<UserDetail> optionalUserDetail = userDetails.stream()
+                .filter(userDetail -> userDetail.getUserName().equals(userName) && userDetail.getPassword().equals(password))
+                .findFirst();
 
-        return checkIfUserIsNewOrOld(checkIfUserExists);
+        return checkIfUserIsNewOrOld(optionalUserDetail);
     }
 
-    private static String checkIfUserIsNewOrOld(boolean checkIfUserExists) {
-        if (checkIfUserExists) {
-            return "User Exists";
+    private static UserDetail checkIfUserIsNewOrOld(Optional<UserDetail> optionalUserDetail) {
+        if (optionalUserDetail.isPresent()) {
+            return optionalUserDetail.get();
         } else {
             throw new InvalidUserException("Invalid Username or password");
         }

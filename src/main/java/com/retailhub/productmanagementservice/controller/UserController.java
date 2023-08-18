@@ -1,5 +1,6 @@
 package com.retailhub.productmanagementservice.controller;
 
+import com.retailhub.productmanagementservice.model.UserDetail;
 import com.retailhub.productmanagementservice.service.UserDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/authentication/{userName}")
-    public ResponseEntity<String> authenticateUser(@PathVariable String userName, @RequestParam String password) {
+    public ResponseEntity<UserDetail> authenticateUser(@PathVariable String userName, @RequestParam String password) {
         return new ResponseEntity<>(userDetailService.authenticateUser(userName, password), HttpStatus.OK);
     }
 }
